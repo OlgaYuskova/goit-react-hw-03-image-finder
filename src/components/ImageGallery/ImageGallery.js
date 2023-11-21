@@ -1,11 +1,12 @@
 import React from 'react';
-import { ImageGalleryList } from './ImageGallery.slyled.js';
 import {ImageGalleryItem } from '../ImageGalleryItem/ImageGalleryItem'
+import { ImageGalleryList } from './ImageGallery.slyled.js';
 
-export const ImageGallery = ({images}) => (
+
+export const ImageGallery = ({images, onClickImageItem}) => (
   <ImageGalleryList>
     {images.map((image) => (
-      <ImageGalleryItem key={image.id} image={image} />
+      <ImageGalleryItem key={image.id} image={image} onClickImageItem={onClickImageItem} />
     ))}
   </ImageGalleryList>
 );

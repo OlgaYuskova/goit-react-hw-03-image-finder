@@ -1,6 +1,8 @@
 import React from 'react';
-import { ButonLoadMore } from './Button.styled'
+import { ButonLoadMore, ButonContainer } from './Button.styled';
 
-export const Button = ({onClick}) => (
-<ButonLoadMore onClick={onClick}>Load More</ButonLoadMore>
+export const Button = ({ onClick }) => (
+  <ButonContainer>
+    <ButonLoadMore onClick={onClick}>Load More</ButonLoadMore>
+  </ButonContainer>
 );

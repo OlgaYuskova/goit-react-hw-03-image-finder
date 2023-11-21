@@ -1,74 +1,83 @@
 import { Component } from 'react';
 import { Searchbar } from './Searchbar/Searchbar';
-import { ImageGallery } from './ImageGallery/ImageGallery'
-import fetchImages from '../API'
-import { Loaders } from './Loader/Loader'
-import { Button } from './Button/Button.js'
-import{Modal} from './Modal/Modal'
+import { ImageGallery } from './ImageGallery/ImageGallery';
+import fetchImages from '../API';
+import { Loaders } from './Loader/Loader';
+import { Button } from './Button/Button.js';
+import { Modal } from './Modal/Modal';
 
 export class App extends Component {
   state = {
     query: '',
     images: [],
     page: 1,
-    hasMoreImages: true,
+    getMoreImg: true,
     isLoading: false,
     showModal: false,
-  };
-
-  toggleModal = () => {
-    this.setState(({ showModal }) => ({
-      showModal: !showModal,
-    }))
-  }
-
-  handleFormSubmit = (query) => {
-    this.setState({ query, images: [], page: 1, hasMoreImages: true, isLoading: true });
+    selectedImage: '',
   };
 
   componentDidUpdate(prevProp, prevState) {
     if (prevState.query !== this.state.query) {
-    this.loadData();
+      this.getData();
     }
   }
 
-  loadData = async () => {
+  handleFormSubmit = query => {
+    this.setState({
+      query,
+      images: [],
+      page: 1,
+      getMoreImg: true,
+      isLoading: true,
+    });
+  };
+
+  handleCloseModal = () => {
+    this.setState({ showModal: false, selectedImage: '' });
+  };
+
+  handleClickOpenModal = selectedImage => {
+    this.setState({ showModal: true, selectedImage });
+  };
+
+  getData = async () => {
     const { query, page } = this.state;
     try {
-      const newImages = await fetchImages( query, page );
-      this.setState((prevState) => ({
+      const newImages = await fetchImages(query, page);
+      this.setState(prevState => ({
         images: [...prevState.images, ...newImages],
         page: prevState.page + 1,
-        hasMoreImages: newImages.length > 0,
+        getMoreImg: newImages.length > 0,
       }));
     } catch (error) {
       console.error('Error fetching images:', error);
     }
 
-    this.setState({isLoading: false })
+    this.setState({ isLoading: false });
   };
 
   render() {
-    const { images, hasMoreImages, isLoading, selectedImg, showModal } = this.state;
+    const { images, isLoading, selectedImage, showModal } = this.state;
 
     return (
-      <div className='Container'>
+      <>
         <Searchbar onSubmit={this.handleFormSubmit} />
+
         <ImageGallery
           query={this.state.query}
           images={images}
-          showButton={hasMoreImages}
+          onClickImageItem={this.handleClickOpenModal}
         />
 
-        {isLoading === true &&
-        <Loaders/>
-        }
-        {images.length !== 0 && (
-          <Button onClick={this.loadData}/>
+        {isLoading === true && <Loaders />}
+
+        {images.length !== 0 && <Button onClick={this.getData} />}
+
+        {showModal && (
+          <Modal image={selectedImage} onClose={this.handleCloseModal} />
         )}
-      
-        {showModal && <Modal selectedImg={selectedImg} />}
-      </div>
+      </>
     );
   }
 }

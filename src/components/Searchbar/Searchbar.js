@@ -1,24 +1,24 @@
-import  { Component } from 'react';
-import {SearchbarCounteiner} from './Searchbar.styled'
+import { Component } from 'react';
+import { SearchbarCounteiner } from './Searchbar.styled';
 
 export class Searchbar extends Component {
-state = {
+  state = {
     query: '',
   };
 
-  handleTextChange = (evt) => {
+  handleChangeText = evt => {
     this.setState({ query: evt.currentTarget.value.toLowerCase() });
   };
 
-    handleSubmit = (evt) => {
-        evt.preventDefault();
-        if (this.state.query.trim() === '') {
-        return
-        }
-        this.props.onSubmit(this.state.query);
+  handleSubmit = evt => {
+    evt.preventDefault();
+    if (this.state.query.trim() === '') {
+      return;
+    }
+    this.props.onSubmit(this.state.query);
 
-        this.setState({query: ''})
-    };
+    this.setState({ query: '' });
+  };
 
   render() {
     return (
@@ -33,7 +33,7 @@ state = {
             name="text"
             placeholder="Search images and photos"
             value={this.state.query}
-            onChange={this.handleTextChange}
+            onChange={this.handleChangeText}
           />
         </form>
       </SearchbarCounteiner>
