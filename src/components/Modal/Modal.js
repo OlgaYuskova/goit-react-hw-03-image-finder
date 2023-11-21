@@ -1,11 +1,10 @@
 import React from 'react';
+import{ModalWindow, OverlayModalWindow } from './Modal.styled'
 
-const Modal = ({ imageUrl, closeModal }) => (
-  <div className="overlay" onClick={closeModal}>
-    <div className="modal">
-      <img src={imageUrl} alt="Large" />
-    </div>
-  </div>
+export const Modal = ({ selectedImg}) => (
+  <OverlayModalWindow >
+    <ModalWindow>
+      <img src={selectedImg} alt="Large"/>
+    </ModalWindow>
+  </OverlayModalWindow>
 );
-
-export default Modal;

@@ -3,18 +3,24 @@ import { Searchbar } from './Searchbar/Searchbar';
 import { ImageGallery } from './ImageGallery/ImageGallery'
 import fetchImages from '../API'
 import { Loaders } from './Loader/Loader'
-import {Button} from './Button/Button.js'
+import { Button } from './Button/Button.js'
+import{Modal} from './Modal/Modal'
 
 export class App extends Component {
   state = {
     query: '',
     images: [],
     page: 1,
-    showModal: false,
-    selectedImage: '',
     hasMoreImages: true,
     isLoading: false,
+    showModal: false,
   };
+
+  toggleModal = () => {
+    this.setState(({ showModal }) => ({
+      showModal: !showModal,
+    }))
+  }
 
   handleFormSubmit = (query) => {
     this.setState({ query, images: [], page: 1, hasMoreImages: true, isLoading: true });
@@ -43,7 +49,7 @@ export class App extends Component {
   };
 
   render() {
-    const { images, hasMoreImages, isLoading } = this.state;
+    const { images, hasMoreImages, isLoading, selectedImg, showModal } = this.state;
 
     return (
       <div className='Container'>
@@ -51,16 +57,17 @@ export class App extends Component {
         <ImageGallery
           query={this.state.query}
           images={images}
-          onLoadMore={this.loadData}
           showButton={hasMoreImages}
         />
 
-        {isLoading === true && 
+        {isLoading === true &&
         <Loaders/>
         }
         {images.length !== 0 && (
-        <Button onClick={this.loadData}/>
+          <Button onClick={this.loadData}/>
         )}
+      
+        {showModal && <Modal selectedImg={selectedImg} />}
       </div>
     );
   }
