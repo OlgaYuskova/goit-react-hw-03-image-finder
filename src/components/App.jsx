@@ -10,6 +10,7 @@ export class App extends Component {
   state = {
     query: '',
     images: [],
+    page: 1,
     getMoreImg: true,
     isLoading: false,
     showModal: false,
@@ -53,7 +54,6 @@ export class App extends Component {
       const newImages = await fetchImages(query, page);
       this.setState(prevState => ({
         images: [...prevState.images, ...newImages],
-        page: page,
         getMoreImg: newImages.length > 0,
       }));
     } catch (error) {
