@@ -18,7 +18,10 @@ export class App extends Component {
   };
 
   componentDidUpdate(prevProp, prevState) {
-    if (prevState.query !== this.state.query) {
+    if (
+      prevState.query !== this.state.query ||
+      prevState.page !== this.state.page
+    ) {
       this.getData();
     }
   }
@@ -41,13 +44,17 @@ export class App extends Component {
     this.setState({ showModal: true, selectedImage });
   };
 
+  handleClickNextPage = () => {
+    this.setState(prevState => ({ page: prevState.page + 1 }));
+  };
+
   getData = async () => {
     const { query, page } = this.state;
     try {
       const newImages = await fetchImages(query, page);
       this.setState(prevState => ({
         images: [...prevState.images, ...newImages],
-        page: prevState.page + 1,
+        page: page,
         getMoreImg: newImages.length > 0,
       }));
     } catch (error) {
@@ -72,7 +79,7 @@ export class App extends Component {
 
         {isLoading === true && <Loaders />}
 
-        {images.length !== 0 && <Button onClick={this.getData} />}
+        {images.length !== 0 && <Button onClick={this.handleClickNextPage} />}
 
         {showModal && (
           <Modal image={selectedImage} onClose={this.handleCloseModal} />
