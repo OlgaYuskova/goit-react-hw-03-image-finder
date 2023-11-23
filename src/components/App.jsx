@@ -10,7 +10,6 @@ export class App extends Component {
   state = {
     query: '',
     images: [],
-    page: 1,
     getMoreImg: true,
     isLoading: false,
     showModal: false,
